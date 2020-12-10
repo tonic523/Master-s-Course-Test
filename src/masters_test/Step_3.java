@@ -19,8 +19,22 @@ public class Step_3 {
 		return cube;
 	}
 
-	static void rotate(int f, int r, int u, int l, int d, boolean D) {
-
+	static void rotateF(char[][][] cube) {
+		char[] temp = new char[3];
+		for (int i = 0; i < 3; i++) {
+			temp[i] = cube[O][0][i];
+			cube[O][0][i] = cube[O][2 - i][0];
+			cube[O][2 - i][i] = cube[O][2][2 - i];
+			cube[O][2][2 - i] = cube[O][i][2];
+			cube[O][i][2] = temp[i];
+		}
+		for (int i = 0; i < 3; i++) {
+			temp[i] = cube[B][2][i];
+			cube[B][2][i] = cube[W][2-i][2];
+			cube[W][2-i][2] = cube[R][0][2-i];
+			cube[R][0][2-i] = cube[G][i][0];
+			cube[G][i][0] = temp[i];
+		}
 	}
 
 	static void print(char cube[][][]) {
@@ -84,7 +98,7 @@ public class Step_3 {
 			for (int i = 0; i < command.length; i++) {
 				if (!command[i].equals("'")) {
 					System.out.println(command[i]);
-					//큐브 동작 구현
+					rotateF(cube);
 					print(cube);
 					System.out.println();
 					n++;
