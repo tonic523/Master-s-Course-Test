@@ -19,21 +19,109 @@ public class Step_3 {
 		return cube;
 	}
 
+	static void standardColor(char[][][] cube, int c) {
+		char[] temp = new char[3];
+		for (int i = 0; i < 2; i++) {
+			temp[i] = cube[c][0][i];
+			cube[c][0][i] = cube[c][2 - i][0];
+			cube[c][2 - i][0] = cube[c][2][2 - i];
+			cube[c][2][2 - i] = cube[c][i][2];
+			cube[c][i][2] = temp[i];
+		}
+	}
+
 	static void rotateF(char[][][] cube) {
 		char[] temp = new char[3];
-		for (int i = 0; i < 3; i++) {
-			temp[i] = cube[O][0][i];
-			cube[O][0][i] = cube[O][2 - i][0];
-			cube[O][2 - i][i] = cube[O][2][2 - i];
-			cube[O][2][2 - i] = cube[O][i][2];
-			cube[O][i][2] = temp[i];
-		}
-		for (int i = 0; i < 3; i++) {
+		standardColor(cube, O);
+		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[B][2][i];
-			cube[B][2][i] = cube[W][2-i][2];
-			cube[W][2-i][2] = cube[R][0][2-i];
-			cube[R][0][2-i] = cube[G][i][0];
+			cube[B][2][i] = cube[W][2 - i][2];
+			cube[W][2 - i][2] = cube[R][0][2 - i];
+			cube[R][0][2 - i] = cube[G][i][0];
 			cube[G][i][0] = temp[i];
+		}
+	}
+
+	static void rotateR(char[][][] cube) {
+		char[] temp = new char[3];
+		standardColor(cube, G);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] = cube[B][2 - i][2];
+			cube[B][2 - i][2] = cube[O][2 - i][2];
+			cube[O][2 - i][2] = cube[R][2 - i][2];
+			cube[R][2 - i][2] = cube[Y][i][0];
+			cube[Y][i][0] = temp[i];
+		}
+	}
+
+	static void rotateL(char[][][] cube) {
+		char[] temp = new char[3];
+		standardColor(cube, W);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] = cube[B][i][0];
+			cube[B][i][0] = cube[Y][2 - i][2];
+			cube[Y][2 - i][2] = cube[R][i][0];
+			cube[R][i][0] = cube[O][i][0];
+			cube[O][i][0] = temp[i];
+		}
+	}
+
+	static void rotateU(char[][][] cube) {
+		char[] temp = new char[3];
+		standardColor(cube, B);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] = cube[Y][0][2 - i];
+			cube[Y][0][2 - i] = cube[W][0][2 - i];
+			cube[W][0][2 - i] = cube[O][0][2 - i];
+			cube[O][0][2 - i] = cube[G][0][2 - i];
+			cube[G][0][2 - i] = temp[i];
+		}
+	}
+
+	static void rotateB(char[][][] cube) {
+		char[] temp = new char[3];
+		standardColor(cube, Y);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] = cube[B][0][2 - i];
+			cube[B][0][2 - i] = cube[G][2 - i][2];
+			cube[G][2 - i][2] = cube[R][2][i];
+			cube[R][2][i] = cube[W][i][0];
+			cube[W][i][0] = temp[i];
+		}
+	}
+
+	static void rotateD(char[][][] cube) {
+		char[] temp = new char[3];
+		standardColor(cube, R);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] = cube[O][2][i];
+			cube[O][2][i] = cube[W][2][i];
+			cube[W][2][i] = cube[Y][2][i];
+			cube[Y][2][i] = cube[G][2][i];
+			cube[G][2][i] = temp[i];
+		}
+	}
+
+	static void commandTheCube(String command, char[][][] cube) {
+		switch (command) {
+		case "U":
+			rotateU(cube);
+			break;
+		case "L":
+			rotateL(cube);
+			break;
+		case "F":
+			rotateF(cube);
+			break;
+		case "R":
+			rotateR(cube);
+			break;
+		case "B":
+			rotateB(cube);
+			break;
+		case "D":
+			rotateD(cube);
+			break;
 		}
 	}
 
@@ -98,7 +186,7 @@ public class Step_3 {
 			for (int i = 0; i < command.length; i++) {
 				if (!command[i].equals("'")) {
 					System.out.println(command[i]);
-					rotateF(cube);
+					commandTheCube(command[i],cube);
 					print(cube);
 					System.out.println();
 					n++;
