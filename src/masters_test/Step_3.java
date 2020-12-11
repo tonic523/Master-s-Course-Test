@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Step_3 {
 	static final int B = 0, W = 1, O = 2, G = 3, Y = 4, R = 5;
-
+// 큐브 생성 함수
 	static char[][][] initCube(char cube[][][]) {
 		for (int j = 0; j < 3; j++) {
 			for (int j2 = 0; j2 < 3; j2++) {
@@ -18,8 +18,8 @@ public class Step_3 {
 		}
 		return cube;
 	}
-
-	static void standardColor(char[][][] cube, int c) {
+// 큐브 front 방향 회전
+	static void rotateFrontColor(char[][][] cube, int c) {
 		char[] temp = new char[3];
 		for (int i = 0; i < 2; i++) {
 			temp[i] = cube[c][0][i];
@@ -29,10 +29,10 @@ public class Step_3 {
 			cube[c][i][2] = temp[i];
 		}
 	}
-
+	// F명령어 회전
 	static void rotateF(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, O);
+		rotateFrontColor(cube, O);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[B][2][i];
 			cube[B][2][i] = cube[W][2 - i][2];
@@ -41,10 +41,10 @@ public class Step_3 {
 			cube[G][i][0] = temp[i];
 		}
 	}
-
+	// R명령어 회전
 	static void rotateR(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, G);
+		rotateFrontColor(cube, G);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[B][2 - i][2];
 			cube[B][2 - i][2] = cube[O][2 - i][2];
@@ -53,10 +53,10 @@ public class Step_3 {
 			cube[Y][i][0] = temp[i];
 		}
 	}
-
+	// L명령어 회전
 	static void rotateL(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, W);
+		rotateFrontColor(cube, W);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[B][i][0];
 			cube[B][i][0] = cube[Y][2 - i][2];
@@ -65,10 +65,10 @@ public class Step_3 {
 			cube[O][i][0] = temp[i];
 		}
 	}
-
+	// U명령어 회전
 	static void rotateU(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, B);
+		rotateFrontColor(cube, B);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[Y][0][2 - i];
 			cube[Y][0][2 - i] = cube[W][0][2 - i];
@@ -77,10 +77,10 @@ public class Step_3 {
 			cube[G][0][2 - i] = temp[i];
 		}
 	}
-
+	// B명령어 회전
 	static void rotateB(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, Y);
+		rotateFrontColor(cube, Y);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[B][0][2 - i];
 			cube[B][0][2 - i] = cube[G][2 - i][2];
@@ -89,10 +89,10 @@ public class Step_3 {
 			cube[W][i][0] = temp[i];
 		}
 	}
-
+	// D명령어 회전
 	static void rotateD(char[][][] cube) {
 		char[] temp = new char[3];
-		standardColor(cube, R);
+		rotateFrontColor(cube, R);
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = cube[O][2][i];
 			cube[O][2][i] = cube[W][2][i];
@@ -101,8 +101,8 @@ public class Step_3 {
 			cube[G][2][i] = temp[i];
 		}
 	}
-
-	static void commandTheCube(String command, char[][][] cube) {
+	// 회전 명령어 분류
+	static void command(String command, char[][][] cube) {
 		switch (command) {
 		case "U":
 			rotateU(cube);
@@ -124,7 +124,18 @@ public class Step_3 {
 			break;
 		}
 	}
-
+	// 역방향 분류 후 큐브에 명령
+	static void commandTheCube(String command, char[][][] cube) {
+		String[] revSplit = command.split("(?!^)");
+		if (revSplit.length == 1) {
+			command(revSplit[0], cube);
+		} else {
+			for (int i = 0; i < 3; i++) {
+				command(revSplit[0], cube);
+			}
+		}
+	}
+	// 큐브 출력
 	static void print(char cube[][][]) {
 		for (int j = 0; j < 3; j++) {
 			System.out.print("      ");
@@ -150,7 +161,7 @@ public class Step_3 {
 			System.out.println();
 		}
 	}
-
+	// 명령어 분류
 	static String[] getCommand(String input) {
 		String[] inputSplit = input.split("(?!^)");
 		String[] command = new String[inputSplit.length];
@@ -186,7 +197,7 @@ public class Step_3 {
 			for (int i = 0; i < command.length; i++) {
 				if (!command[i].equals("'")) {
 					System.out.println(command[i]);
-					commandTheCube(command[i],cube);
+					commandTheCube(command[i], cube);
 					print(cube);
 					System.out.println();
 					n++;
