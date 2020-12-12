@@ -3,165 +3,19 @@ package masters_test;
 import java.util.Scanner;
 
 public class Step_3 {
-	static final int B = 0, W = 1, O = 2, G = 3, Y = 4, R = 5;
-// 큐브 생성 함수
-	static char[][][] initCube(char cube[][][]) {
-		for (int j = 0; j < 3; j++) {
-			for (int j2 = 0; j2 < 3; j2++) {
-				cube[B][j][j2] = 'B';
-				cube[W][j][j2] = 'W';
-				cube[O][j][j2] = 'O';
-				cube[G][j][j2] = 'G';
-				cube[Y][j][j2] = 'Y';
-				cube[R][j][j2] = 'R';
-			}
-		}
-		return cube;
-	}
-// 큐브 front 방향 회전
-	static void rotateFrontColor(char[][][] cube, int c) {
-		char[] temp = new char[3];
-		for (int i = 0; i < 2; i++) {
-			temp[i] = cube[c][0][i];
-			cube[c][0][i] = cube[c][2 - i][0];
-			cube[c][2 - i][0] = cube[c][2][2 - i];
-			cube[c][2][2 - i] = cube[c][i][2];
-			cube[c][i][2] = temp[i];
-		}
-	}
-	// F명령어 회전
-	static void rotateF(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, O);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[B][2][i];
-			cube[B][2][i] = cube[W][2 - i][2];
-			cube[W][2 - i][2] = cube[R][0][2 - i];
-			cube[R][0][2 - i] = cube[G][i][0];
-			cube[G][i][0] = temp[i];
-		}
-	}
-	// R명령어 회전
-	static void rotateR(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, G);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[B][2 - i][2];
-			cube[B][2 - i][2] = cube[O][2 - i][2];
-			cube[O][2 - i][2] = cube[R][2 - i][2];
-			cube[R][2 - i][2] = cube[Y][i][0];
-			cube[Y][i][0] = temp[i];
-		}
-	}
-	// L명령어 회전
-	static void rotateL(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, W);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[B][i][0];
-			cube[B][i][0] = cube[Y][2 - i][2];
-			cube[Y][2 - i][2] = cube[R][i][0];
-			cube[R][i][0] = cube[O][i][0];
-			cube[O][i][0] = temp[i];
-		}
-	}
-	// U명령어 회전
-	static void rotateU(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, B);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[Y][0][2 - i];
-			cube[Y][0][2 - i] = cube[W][0][2 - i];
-			cube[W][0][2 - i] = cube[O][0][2 - i];
-			cube[O][0][2 - i] = cube[G][0][2 - i];
-			cube[G][0][2 - i] = temp[i];
-		}
-	}
-	// B명령어 회전
-	static void rotateB(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, Y);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[B][0][2 - i];
-			cube[B][0][2 - i] = cube[G][2 - i][2];
-			cube[G][2 - i][2] = cube[R][2][i];
-			cube[R][2][i] = cube[W][i][0];
-			cube[W][i][0] = temp[i];
-		}
-	}
-	// D명령어 회전
-	static void rotateD(char[][][] cube) {
-		char[] temp = new char[3];
-		rotateFrontColor(cube, R);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = cube[O][2][i];
-			cube[O][2][i] = cube[W][2][i];
-			cube[W][2][i] = cube[Y][2][i];
-			cube[Y][2][i] = cube[G][2][i];
-			cube[G][2][i] = temp[i];
-		}
-	}
-	// 회전 명령어 분류
-	static void command(String command, char[][][] cube) {
-		switch (command) {
-		case "U":
-			rotateU(cube);
-			break;
-		case "L":
-			rotateL(cube);
-			break;
-		case "F":
-			rotateF(cube);
-			break;
-		case "R":
-			rotateR(cube);
-			break;
-		case "B":
-			rotateB(cube);
-			break;
-		case "D":
-			rotateD(cube);
-			break;
-		}
-	}
-	// 역방향 분류 후 큐브에 명령
-	static void commandTheCube(String command, char[][][] cube) {
-		String[] revSplit = command.split("(?!^)");
-		if (revSplit.length == 1) {
-			command(revSplit[0], cube);
+// Q 입력시 강제종료
+	static boolean command_Q(String command, long start, int n) {
+		if (command.equals("Q")) {
+			long end = System.currentTimeMillis();
+			System.out.println("실행 시간 : " + (end - start) / 1000.0 + "초");
+			System.out.println("조작갯수: " + n);
+			System.out.println("이용해주셔서 감사합니다!");
+			return false;
 		} else {
-			for (int i = 0; i < 3; i++) {
-				command(revSplit[0], cube);
-			}
+			return true;
 		}
 	}
-	// 큐브 출력
-	static void print(char cube[][][]) {
-		for (int j = 0; j < 3; j++) {
-			System.out.print("      ");
-			for (int j2 = 0; j2 < 3; j2++) {
-				System.out.print(cube[0][j][j2]);
-			}
-			System.out.println();
-		}
-		for (int i = 0; i < 3; i++) {
-			for (int j = 1; j < 5; j++) {
-				for (int j2 = 0; j2 < 3; j2++) {
-					System.out.print(cube[j][i][j2]);
-				}
-				System.out.print("   ");
-			}
-			System.out.println();
-		}
-		for (int j = 0; j < 3; j++) {
-			System.out.print("      ");
-			for (int j2 = 0; j2 < 3; j2++) {
-				System.out.print(cube[5][j][j2]);
-			}
-			System.out.println();
-		}
-	}
-	// 명령어 분류
+// 명령어 분류
 	static String[] getCommand(String input) {
 		String[] inputSplit = input.split("(?!^)");
 		String[] command = new String[inputSplit.length];
@@ -178,34 +32,31 @@ public class Step_3 {
 		}
 		return command;
 	}
-
+	
 	public static void main(String[] args) {
-		char[][][] cube = new char[6][3][3];
-		int n = 0;
-		cube = initCube(cube);
-		print(cube);
 		Scanner scanner = new Scanner(System.in);
-		while (true) {
-			System.out.printf("CUBE> ");
+		char[][][] cube = new char[6][3][3];
+		char[][][] initCube = new char[6][3][3];
+		int n = 0;
+		int num = 0;
+		boolean b = true;
+		long start = System.currentTimeMillis(); // 시작하는 시점 계산
+		Cube.getCube(initCube);
+		Cube.getCube(cube);
+		System.out.print("큐브를 몇번 섞으시겠습니까?");
+		num = scanner.nextInt();
+		Cube.shuffle(cube, num); // 큐브 섞기
+		scanner.nextLine();
+		Cube.print(cube);
+		while (b) {
+			System.out.printf("CUBE> "); // 프롬프트
 			String input = scanner.nextLine();
-			String[] command = getCommand(input);
-			if (command[0].equals("Q")) {
-				System.out.println("조작갯수: " + n);
-				System.out.println("이용해주셔서 감사합니다!");
-				break;
+			String[] command = getCommand(input); // 명령어 분류
+			b = command_Q(command[0], start, n);// Q입력시 종료
+			if (b != false) {
+				Cube.commandTheCube(command, initCube, cube, b, start, n); // 회전 명령
 			}
-			for (int i = 0; i < command.length; i++) {
-				if (!command[i].equals("'")) {
-					System.out.println(command[i]);
-					commandTheCube(command[i], cube);
-					print(cube);
-					System.out.println();
-					n++;
-				}
-			}
-
-		}
+		};
 		scanner.close();
 	}
-
 }
